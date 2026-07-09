@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontener na gruz — zamów online w całej Polsce | EkoWywóz</title>
+  <meta name="description" content="Kontener na gruz z podstawieniem nawet następnego dnia — cała Polska. Wybierz rozmiar (1–7 m³), cenę widzisz od razu. Zamów online lub telefonicznie.">
+  <link rel="canonical" href="https://example.com/">
+  <meta property="og:title" content="Kontener na gruz — zamów online w całej Polsce">
+  <meta property="og:description" content="Kontenery na gruz i odpady 1–7 m³ z cenami od razu. Podstawienie nawet następnego dnia, w całej Polsce.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="img/kontener-na-gruz.jpg">
+  <meta property="og:locale" content="pl_PL">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "EkoWywóz",
+    "description": "Kontenery na gruz i wywóz odpadów w całej Polsce. Kontenery 3,5–7 m³ i worki BigBag, podstawienie nawet następnego dnia.",
+    "telephone": "+48500000000",
+    "email": "kontakt@example.com",
+    "image": "img/kontener-na-gruz.jpg",
+    "areaServed": "Polska",
+    "openingHours": ["Mo-Fr 06:00-17:00", "Sa 06:00-14:00"],
+    "priceRange": "$$"
+  }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .tile[aria-pressed="true"] {
+      border-color: #15803d;
+      background-color: #f0fdf4;
+      box-shadow: inset 0 0 0 1px #15803d;
+    }
+  </style>
+</head>
+<body class="font-sans text-gray-800 bg-white antialiased">
+
+  <!-- ===== Nagłówek ===== -->
+  <header class="sticky top-0 z-50 bg-white border-b border-gray-200">
+    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="#" class="text-lg font-extrabold tracking-tight">
+        Eko<span class="text-brand-700">Wywóz</span>
+      </a>
+      <div class="flex items-center gap-3 sm:gap-5">
+        <a href="tel:+48500000000" class="text-sm font-semibold text-gray-700 hover:text-brand-700">
+          <span class="hidden sm:inline text-gray-400 font-normal mr-1">Zadzwoń:</span>500 000 000
+        </a>
+        <a href="#zamow" class="bg-brand-700 hover:bg-brand-800 text-white text-sm font-semibold px-4 py-2 rounded-md">
+          Zamów
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== 1. Hero ===== -->
+  <section class="border-b border-gray-100">
+    <div class="max-w-5xl mx-auto px-4 py-14 sm:py-20 grid md:grid-cols-2 gap-10 md:gap-12 items-center">
+      <div>
+        <p class="text-sm font-semibold text-brand-700 uppercase tracking-wide mb-3">Działamy w całej Polsce</p>
+        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
+          Kontener na gruz i odpady. Zamów w 30&nbsp;sekund.
+        </h1>
+        <p class="mt-5 text-lg text-gray-500">
+          Wybierz rodzaj odpadów i wielkość kontenera — cenę widzisz od razu.
+          Podstawiamy kontener nawet następnego dnia.
+        </p>
+        <a href="#zamow" class="mt-8 inline-block bg-brand-700 hover:bg-brand-800 text-white font-semibold px-8 py-3.5 rounded-md text-base">
+          Zamów kontener
+        </a>
+      </div>
+      <img src="img/kontener-na-gruz.jpg" width="1600" height="1068"
+        alt="Kontener na gruz i odpady budowlane — podstawienie pod adres w Warszawie"
+        class="rounded-lg w-full h-64 md:h-80 object-cover" loading="eager" fetchpriority="high">
+    </div>
+  </section>
+
+  <!-- ===== 2. Zamawiarka ===== -->
+  <section id="zamow" class="bg-gray-50 border-b border-gray-100">
+    <div class="max-w-3xl mx-auto px-4 py-16 sm:py-20">
+      <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 text-center">Zamów kontener online</h2>
+      <p class="mt-2 text-gray-500 text-center">Kilka chwil, bez rejestracji i formalności.</p>
+
+      <!-- Krok 1 -->
+      <div class="mt-10">
+        <h3 class="font-semibold text-gray-900 mb-3"><span class="text-brand-700">1.</span> Co wywozimy?</h3>
+        <div id="typy" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <button type="button" data-type="gruz" aria-pressed="false"
+            class="tile border border-gray-300 bg-white rounded-md px-3 py-4 text-sm font-medium text-center hover:border-brand-600">
+            Gruz i odpady budowlane
+          </button>
+          <button type="button" data-type="zmieszane" aria-pressed="false"
+            class="tile border border-gray-300 bg-white rounded-md px-3 py-4 text-sm font-medium text-center hover:border-brand-600">
+            Odpady zmieszane
+          </button>
+          <button type="button" data-type="gabaryty" aria-pressed="false"
+            class="tile border border-gray-300 bg-white rounded-md px-3 py-4 text-sm font-medium text-center hover:border-brand-600">
+            Gabaryty i meble
+          </button>
+          <button type="button" data-type="zielone" aria-pressed="false"
+            class="tile border border-gray-300 bg-white rounded-md px-3 py-4 text-sm font-medium text-center hover:border-brand-600">
+            Odpady zielone
+          </button>
+        </div>
+      </div>
+
+      <!-- Krok 2 -->
+      <div class="mt-10">
+        <h3 class="font-semibold text-gray-900 mb-3"><span class="text-brand-700">2.</span> Wielkość kontenera</h3>
+        <div id="rozmiary" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <button type="button" data-size="bigbag" aria-pressed="false"
+            class="tile border border-gray-300 bg-white rounded-md px-3 py-4 text-center hover:border-brand-600">
+            <span class="block text-sm font-medium">Worek BigBag</span>
+            <span class="block text-xs text-gray-400 mt-0.5">1 m³</span>
+            <span class="block text-brand-700 font-bold mt-2" data-price-label>XXX zł</span>
+          </button>
+          <button type="button" data-size="k35" aria-pressed="false"
+            class="tile border border-gray-300 bg-white rounded-md px-3 py-4 text-center hover:border-brand-600">
+            <span class="block text-sm font-medium">Kontener mały</span>
+            <span class="block text-xs text-gray-400 mt-0.5">3,5 m³</span>
+            <span class="block text-brand-700 font-bold mt-2" data-price-label>XXX zł</span>
+          </button>
+          <button type="button" data-size="k55" aria-pressed="false"
+            class="tile border border-gray-300 bg-white rounded-md px-3 py-4 text-center hover:border-brand-600">
+            <span class="block text-sm font-medium">Kontener średni</span>
+            <span class="block text-xs text-gray-400 mt-0.5">5,5 m³</span>
+            <span class="block text-brand-700 font-bold mt-2" data-price-label>XXX zł</span>
+          </button>
+          <button type="button" data-size="k70" aria-pressed="false"
+            class="tile border border-gray-300 bg-white rounded-md px-3 py-4 text-center hover:border-brand-600">
+            <span class="block text-sm font-medium">Kontener duży</span>
+            <span class="block text-xs text-gray-400 mt-0.5">7 m³</span>
+            <span class="block text-brand-700 font-bold mt-2" data-price-label>XXX zł</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Krok 3: adres podstawienia -->
+      <div class="mt-10">
+        <h3 class="font-semibold text-gray-900 mb-3"><span class="text-brand-700">3.</span> Adres podstawienia</h3>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="relative col-span-2">
+            <input id="pole-ulica" type="text" placeholder="Ulica *" autocomplete="off"
+              class="border border-gray-300 rounded-md px-3 py-3 text-sm w-full focus:outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600">
+            <div id="sug-ulica" class="hidden absolute z-20 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden"></div>
+          </div>
+          <input id="pole-nr" type="text" placeholder="Nr domu" autocomplete="off"
+            class="border border-gray-300 rounded-md px-3 py-3 text-sm w-full focus:outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600">
+        </div>
+        <div class="grid grid-cols-3 gap-3 mt-3">
+          <input id="pole-kod" type="text" placeholder="Kod (00-000)" autocomplete="off" inputmode="numeric"
+            class="border border-gray-300 rounded-md px-3 py-3 text-sm w-full focus:outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600">
+          <div class="relative col-span-2">
+            <input id="pole-miejscowosc" type="text" placeholder="Miejscowość *" autocomplete="off"
+              class="border border-gray-300 rounded-md px-3 py-3 text-sm w-full focus:outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600">
+            <div id="sug-miejscowosc" class="hidden absolute z-20 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden"></div>
+          </div>
+        </div>
+        <div class="mt-3 relative">
+          <div id="mapa" class="h-56 sm:h-64 rounded-md border border-gray-300 z-0"></div>
+          <button type="button" id="btn-lokalizacja"
+            class="absolute top-3 right-3 z-10 bg-white border border-gray-300 hover:border-brand-600 text-gray-700 text-xs font-semibold px-3 py-2 rounded-md shadow-sm">
+            Znajdź moją lokalizację
+          </button>
+        </div>
+        <p class="mt-2 text-xs text-gray-400">Zacznij wpisywać ulicę, kliknij na mapie albo przeciągnij pinezkę — adres uzupełni się sam.</p>
+      </div>
+
+      <!-- Krok 4: kontakt i termin -->
+      <div class="mt-10">
+        <h3 class="font-semibold text-gray-900 mb-3"><span class="text-brand-700">4.</span> Kontakt i termin</h3>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <input id="pole-telefon" type="tel" placeholder="Telefon *"
+            class="border border-gray-300 rounded-md px-3 py-3 text-sm w-full focus:outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600">
+          <input id="pole-data" type="date"
+            class="border border-gray-300 rounded-md px-3 py-3 text-sm w-full text-gray-500 focus:outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600">
+        </div>
+      </div>
+
+      <!-- Podsumowanie -->
+      <div class="mt-10 bg-white border border-gray-200 rounded-md p-5 sm:flex sm:items-center sm:justify-between">
+        <div>
+          <p class="text-sm text-gray-500">Twoje zamówienie</p>
+          <p id="podsumowanie" class="font-semibold text-gray-900 mt-0.5">Wybierz rodzaj odpadów i kontener</p>
+        </div>
+        <div class="mt-3 sm:mt-0 sm:text-right">
+          <p class="text-sm text-gray-500">Cena</p>
+          <p id="cena" class="text-2xl font-extrabold text-brand-700">— zł</p>
+        </div>
+      </div>
+
+      <div class="mt-5 grid sm:grid-cols-2 gap-3">
+        <a id="btn-tel" href="tel:+48500000000"
+          class="block text-center bg-brand-700 hover:bg-brand-800 text-white font-semibold px-6 py-3.5 rounded-md">
+          Zadzwoń i zamów
+        </a>
+        <a id="btn-mail" href="#"
+          class="block text-center border border-brand-700 text-brand-700 hover:bg-brand-50 font-semibold px-6 py-3.5 rounded-md">
+          Wyślij zamówienie e‑mailem
+        </a>
+      </div>
+      <p id="blad" class="hidden mt-3 text-sm text-red-600 text-center"></p>
+    </div>
+  </section>
+
+  <!-- ===== 3. Jak to działa ===== -->
+  <section class="border-b border-gray-100">
+    <div class="max-w-5xl mx-auto px-4 py-16 sm:py-20">
+      <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 text-center">Jak to działa</h2>
+      <div class="mt-12 grid sm:grid-cols-3 gap-10 sm:gap-8">
+        <div>
+          <p class="text-brand-700 font-extrabold text-3xl">1</p>
+          <h3 class="mt-3 font-semibold text-gray-900">Zamawiasz</h3>
+          <p class="mt-1.5 text-gray-500 text-sm leading-relaxed">
+            Wybierasz rodzaj odpadów i wielkość kontenera. Cenę znasz od razu — bez ukrytych kosztów.
+          </p>
+        </div>
+        <div>
+          <p class="text-brand-700 font-extrabold text-3xl">2</p>
+          <h3 class="mt-3 font-semibold text-gray-900">Podstawiamy kontener</h3>
+          <p class="mt-1.5 text-gray-500 text-sm leading-relaxed">
+            Sprawdzony lokalny przewoźnik z naszej sieci podstawia kontener pod wskazany adres — nawet następnego dnia.
+          </p>
+        </div>
+        <div>
+          <p class="text-brand-700 font-extrabold text-3xl">3</p>
+          <h3 class="mt-3 font-semibold text-gray-900">Zabieramy i utylizujemy</h3>
+          <p class="mt-1.5 text-gray-500 text-sm leading-relaxed">
+            Odbieramy pełny kontener i legalnie utylizujemy odpady. Działamy zgodnie z BDO.
+          </p>
+        </div>
+      </div>
+      <div class="mt-14 grid sm:grid-cols-2 gap-4">
+        <img src="img/wywoz-gruzu-budowa.jpg" width="1400" height="933"
+          alt="Wywóz gruzu z placu budowy — odpady budowlane i rozbiórkowe"
+          class="rounded-lg w-full h-56 sm:h-64 object-cover" loading="lazy">
+        <img src="img/kontenery-odpady-segregacja.jpg" width="1400" height="932"
+          alt="Kontenery na odpady — segregacja i legalna utylizacja zgodnie z BDO"
+          class="rounded-lg w-full h-56 sm:h-64 object-cover" loading="lazy">
+      </div>
+      <div class="mt-10 border-t border-gray-100 pt-8">
+        <p class="text-sm text-gray-500 text-center">
+          <span class="font-semibold text-gray-700">Przyjmujemy:</span>
+          gruz i odpady budowlane · odpady zmieszane · meble i gabaryty · styropian · odpady zielone
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. Kontakt + stopka ===== -->
+  <section id="kontakt">
+    <div class="max-w-5xl mx-auto px-4 py-16 sm:py-20">
+      <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 text-center">Kontakt</h2>
+      <div class="mt-10 grid sm:grid-cols-3 gap-8 text-center">
+        <div>
+          <p class="text-sm text-gray-500">Telefon</p>
+          <a href="tel:+48500000000" class="mt-1 block font-semibold text-gray-900 hover:text-brand-700">500 000 000</a>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">E-mail</p>
+          <a href="mailto:kontakt@example.com" class="mt-1 block font-semibold text-gray-900 hover:text-brand-700">kontakt@example.com</a>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Godziny pracy</p>
+          <p class="mt-1 font-semibold text-gray-900">Pn–Pt 6:00–17:00 · Sb 6:00–14:00</p>
+        </div>
+      </div>
+      <p class="mt-10 text-sm text-gray-400 text-center max-w-2xl mx-auto">
+        Działamy w całej Polsce — dzięki sieci lokalnych przewoźników podstawimy kontener
+        zarówno w dużym mieście, jak i w mniejszej miejscowości.
+      </p>
+    </div>
+    <footer class="border-t border-gray-200">
+      <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-400">
+        <p>© 2026 EkoWywóz · NIP 000-000-00-00 · BDO 000000000</p>
+        <a href="#" class="hover:text-gray-600">Regulamin</a>
+      </div>
+    </footer>
+  </section>
+
+  <script>
+    // === CENNIK: podmień wartości null na ceny w zł, np. gruz: { bigbag: 250, k35: 450, ... } ===
+    const CENNIK = {
+      gruz:      { bigbag: null, k35: null, k55: null, k70: null },
+      zmieszane: { bigbag: null, k35: null, k55: null, k70: null },
+      gabaryty:  { bigbag: null, k35: null, k55: null, k70: null },
+      zielone:   { bigbag: null, k35: null, k55: null, k70: null },
+    };
+    const NAZWY_TYPOW = {
+      gruz: 'Gruz i odpady budowlane',
+      zmieszane: 'Odpady zmieszane',
+      gabaryty: 'Gabaryty i meble',
+      zielone: 'Odpady zielone',
+    };
+    const NAZWY_ROZMIAROW = {
+      bigbag: 'Worek BigBag 1 m³',
+      k35: 'Kontener 3,5 m³',
+      k55: 'Kontener 5,5 m³',
+      k70: 'Kontener 7 m³',
+    };
+    const EMAIL_ZAMOWIEN = 'kontakt@example.com';
+
+    const stan = { type: null, size: null };
+
+    function cena() {
+      if (!stan.type || !stan.size) return null;
+      return CENNIK[stan.type][stan.size]; // null = cena jeszcze nieustalona
+    }
+
+    function formatCeny(c) {
+      return c === null ? 'XXX zł' : c + ' zł';
+    }
+
+    function odswiez() {
+      document.querySelectorAll('#typy .tile').forEach(el =>
+        el.setAttribute('aria-pressed', String(el.dataset.type === stan.type)));
+      document.querySelectorAll('#rozmiary .tile').forEach(el =>
+        el.setAttribute('aria-pressed', String(el.dataset.size === stan.size)));
+
+      // ceny na kafelkach zależne od wybranego rodzaju odpadów
+      document.querySelectorAll('#rozmiary .tile').forEach(el => {
+        const c = stan.type ? CENNIK[stan.type][el.dataset.size] : null;
+        el.querySelector('[data-price-label]').textContent = formatCeny(c);
+      });
+
+      const pods = document.getElementById('podsumowanie');
+      if (stan.type && stan.size) {
+        pods.textContent = NAZWY_TYPOW[stan.type] + ' — ' + NAZWY_ROZMIAROW[stan.size];
+      } else if (stan.type) {
+        pods.textContent = NAZWY_TYPOW[stan.type] + ' — wybierz kontener';
+      } else {
+        pods.textContent = 'Wybierz rodzaj odpadów i kontener';
+      }
+      document.getElementById('cena').textContent =
+        (stan.type && stan.size) ? formatCeny(cena()) : '— zł';
+    }
+
+    document.getElementById('typy').addEventListener('click', e => {
+      const btn = e.target.closest('.tile');
+      if (!btn) return;
+      stan.type = btn.dataset.type;
+      odswiez();
+    });
+    document.getElementById('rozmiary').addEventListener('click', e => {
+      const btn = e.target.closest('.tile');
+      if (!btn) return;
+      stan.size = btn.dataset.size;
+      odswiez();
+    });
+
+    // data podstawienia: najwcześniej jutro
+    (function () {
+      const d = new Date();
+      d.setDate(d.getDate() + 1);
+      document.getElementById('pole-data').min = d.toISOString().slice(0, 10);
+    })();
+
+    document.getElementById('btn-mail').addEventListener('click', e => {
+      e.preventDefault();
+      const blad = document.getElementById('blad');
+      const ulica = document.getElementById('pole-ulica').value.trim();
+      const nr = document.getElementById('pole-nr').value.trim();
+      const kod = document.getElementById('pole-kod').value.trim();
+      const miejscowosc = document.getElementById('pole-miejscowosc').value.trim();
+      const tel = document.getElementById('pole-telefon').value.trim();
+      const data = document.getElementById('pole-data').value;
+
+      if (!stan.type || !stan.size) {
+        blad.textContent = 'Wybierz rodzaj odpadów i wielkość kontenera.';
+        blad.classList.remove('hidden');
+        return;
+      }
+      if (!miejscowosc || !tel) {
+        blad.textContent = 'Podaj miejscowość i telefon.';
+        blad.classList.remove('hidden');
+        return;
+      }
+      blad.classList.add('hidden');
+
+      const adres = [ulica && (ulica + (nr ? ' ' + nr : '')), [kod, miejscowosc].filter(Boolean).join(' ')]
+        .filter(Boolean).join(', ');
+      const temat = 'Zamówienie [' + miejscowosc + ']: ' + NAZWY_TYPOW[stan.type] + ' — ' + NAZWY_ROZMIAROW[stan.size];
+      const tresc =
+        'Adres podstawienia: ' + adres + '\n' +
+        'Rodzaj odpadów: ' + NAZWY_TYPOW[stan.type] + '\n' +
+        'Kontener: ' + NAZWY_ROZMIAROW[stan.size] + '\n' +
+        'Cena: ' + formatCeny(cena()) + '\n' +
+        'Telefon: ' + tel + '\n' +
+        'Termin: ' + (data || 'do ustalenia');
+      location.href = 'mailto:' + EMAIL_ZAMOWIEN +
+        '?subject=' + encodeURIComponent(temat) +
+        '&body=' + encodeURIComponent(tresc);
+    });
+
+    // ===== Adres: podpowiedzi (Photon/OSM), mapa (Leaflet) i geolokalizacja =====
+    (function () {
+      const pola = {
+        ulica: document.getElementById('pole-ulica'),
+        nr: document.getElementById('pole-nr'),
+        kod: document.getElementById('pole-kod'),
+        miejscowosc: document.getElementById('pole-miejscowosc'),
+      };
+
+      // --- mapa ---
+      const mapa = L.map('mapa', { scrollWheelZoom: false }).setView([52.07, 19.48], 6);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(mapa);
+      let pinezka = null;
+
+      function ustawPinezke(lat, lon, zoom) {
+        if (!pinezka) {
+          pinezka = L.marker([lat, lon], { draggable: true }).addTo(mapa);
+          pinezka.on('dragend', () => {
+            const p = pinezka.getLatLng();
+            adresZWspolrzednych(p.lat, p.lng);
+          });
+        } else {
+          pinezka.setLatLng([lat, lon]);
+        }
+        mapa.setView([lat, lon], zoom || Math.max(mapa.getZoom(), 16));
+      }
+
+      mapa.on('click', e => {
+        ustawPinezke(e.latlng.lat, e.latlng.lng);
+        adresZWspolrzednych(e.latlng.lat, e.latlng.lng);
+      });
+
+      // --- geokodowanie wsteczne: współrzędne -> pola adresu ---
+      async function adresZWspolrzednych(lat, lon) {
+        try {
+          const r = await fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&accept-language=pl' +
+            '&lat=' + lat + '&lon=' + lon);
+          const d = await r.json();
+          const a = d.address || {};
+          if (a.road) pola.ulica.value = a.road;
+          if (a.house_number) pola.nr.value = a.house_number;
+          if (a.postcode) pola.kod.value = a.postcode;
+          const m = a.city || a.town || a.village || a.municipality;
+          if (m) pola.miejscowosc.value = m;
+        } catch (err) { /* brak internetu — pola zostają jak są */ }
+      }
+
+      // --- podpowiedzi podczas pisania (Photon, filtr: Polska) ---
+      function debounce(fn, ms) {
+        let t;
+        return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+      }
+
+      async function podpowiedzi(q) {
+        const r = await fetch('https://photon.komoot.io/api/?lang=default&limit=6&q=' + encodeURIComponent(q));
+        const d = await r.json();
+        return (d.features || []).filter(f => (f.properties.countrycode || '') === 'PL');
+      }
+
+      function pokazListe(box, wyniki, opisz, wybierz) {
+        const widziane = new Set();
+        wyniki = wyniki.filter(f => {
+          const klucz = opisz(f.properties);
+          if (widziane.has(klucz)) return false;
+          widziane.add(klucz);
+          return true;
+        });
+        if (!wyniki.length) { box.classList.add('hidden'); return; }
+        box.innerHTML = '';
+        wyniki.forEach(f => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'block w-full text-left px-3 py-2.5 text-sm hover:bg-brand-50 border-b border-gray-100 last:border-0';
+          b.textContent = opisz(f.properties);
+          b.addEventListener('click', () => {
+            wybierz(f);
+            box.classList.add('hidden');
+          });
+          box.appendChild(b);
+        });
+        box.classList.remove('hidden');
+      }
+
+      function jestMiejscowoscia(p) {
+        return p.osm_key === 'place' || (p.osm_key === 'boundary' && p.osm_value === 'administrative');
+      }
+
+      function nazwaMiejscowosci(p) {
+        return p.city || p.town || p.village || (jestMiejscowoscia(p) ? p.name : '') || '';
+      }
+
+      function wypelnij(f, coUzupelnic) {
+        const p = f.properties;
+        if (coUzupelnic.ulica && (p.street || p.osm_key === 'highway')) pola.ulica.value = p.street || p.name;
+        if (p.housenumber) pola.nr.value = p.housenumber;
+        if (p.postcode) pola.kod.value = p.postcode;
+        const m = nazwaMiejscowosci(p);
+        if (m) pola.miejscowosc.value = m;
+        const [lon, lat] = f.geometry.coordinates;
+        ustawPinezke(lat, lon, coUzupelnic.ulica ? 16 : 12);
+      }
+
+      // ulica: szukamy "ulica + miejscowość" żeby zawęzić wyniki
+      const sugUlica = document.getElementById('sug-ulica');
+      pola.ulica.addEventListener('input', debounce(async () => {
+        const q = pola.ulica.value.trim();
+        if (q.length < 3) { sugUlica.classList.add('hidden'); return; }
+        try {
+          const wyniki = (await podpowiedzi(q + ' ' + pola.miejscowosc.value.trim()))
+            .filter(f => ['highway', 'place', 'building'].includes(f.properties.osm_key) || f.properties.street);
+          pokazListe(sugUlica, wyniki, p => {
+            const ul = (p.street || p.name || '') + (p.housenumber ? ' ' + p.housenumber : '');
+            return ul + (nazwaMiejscowosci(p) ? ', ' + nazwaMiejscowosci(p) : '') + (p.postcode ? ' (' + p.postcode + ')' : '');
+          }, f => wypelnij(f, { ulica: true }));
+        } catch (err) { sugUlica.classList.add('hidden'); }
+      }, 350));
+
+      // miejscowość: podpowiadamy miasta/wsie
+      const sugMiejsc = document.getElementById('sug-miejscowosc');
+      pola.miejscowosc.addEventListener('input', debounce(async () => {
+        const q = pola.miejscowosc.value.trim();
+        if (q.length < 2) { sugMiejsc.classList.add('hidden'); return; }
+        try {
+          const wyniki = (await podpowiedzi(q)).filter(f => jestMiejscowoscia(f.properties));
+          pokazListe(sugMiejsc, wyniki, p => p.name + (p.state ? ', ' + p.state : ''),
+            f => { pola.miejscowosc.value = f.properties.name; wypelnij(f, { ulica: false }); });
+        } catch (err) { sugMiejsc.classList.add('hidden'); }
+      }, 350));
+
+      // zamykanie list po kliknięciu poza nimi
+      document.addEventListener('click', e => {
+        if (!sugUlica.contains(e.target) && e.target !== pola.ulica) sugUlica.classList.add('hidden');
+        if (!sugMiejsc.contains(e.target) && e.target !== pola.miejscowosc) sugMiejsc.classList.add('hidden');
+      });
+
+      // --- „Znajdź moją lokalizację" ---
+      const btnLok = document.getElementById('btn-lokalizacja');
+      btnLok.addEventListener('click', () => {
+        if (!navigator.geolocation) {
+          btnLok.textContent = 'Lokalizacja niedostępna';
+          return;
+        }
+        btnLok.textContent = 'Szukam…';
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            btnLok.textContent = 'Znajdź moją lokalizację';
+            ustawPinezke(pos.coords.latitude, pos.coords.longitude, 17);
+            adresZWspolrzednych(pos.coords.latitude, pos.coords.longitude);
+          },
+          () => { btnLok.textContent = 'Brak zgody na lokalizację'; },
+          { enableHighAccuracy: true, timeout: 10000 }
+        );
+      });
+    })();
+  </script>
+</body>
+</html>
