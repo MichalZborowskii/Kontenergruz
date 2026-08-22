@@ -993,5 +993,39 @@
       });
     })();
   </script>
+
+  <!-- ===== Chowanie nagłówka na mobile przy scrollowaniu w dół ===== -->
+  <script>
+    (function () {
+      const header = document.querySelector('header');
+      let ostatniScroll = window.scrollY;
+      let ticking = false;
+
+      function obsluzScroll() {
+        const aktualny = window.scrollY;
+        const naMobile = window.innerWidth < 768; // poniżej breakpointu md
+
+        if (naMobile && aktualny > ostatniScroll && aktualny > 80) {
+          header.style.transform = 'translateY(-150%)';
+        } else {
+          header.style.transform = 'translateY(0)';
+        }
+
+        ostatniScroll = aktualny;
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(obsluzScroll);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 768) header.style.transform = 'translateY(0)';
+      });
+    })();
+  </script>
 </body>
 </html>
