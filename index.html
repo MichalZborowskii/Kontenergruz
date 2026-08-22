@@ -315,8 +315,32 @@
         <div class="grid sm:grid-cols-2 gap-4">
           <input id="pole-telefon" type="tel" placeholder="Telefon *"
             class="bg-white border-2 border-gray-300 rounded-2xl px-4 py-4 text-base w-full focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/20 transition-all shadow-md">
-          <input id="pole-data" type="date"
-            class="bg-white border-2 border-gray-300 rounded-2xl px-4 py-4 text-base w-full text-gray-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/20 transition-all shadow-md">
+          <div class="relative">
+            <input id="pole-data" type="hidden">
+            <button type="button" id="pole-data-btn"
+              class="bg-white border-2 border-gray-300 rounded-2xl px-4 py-4 text-base w-full text-left flex items-center justify-between gap-2 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/20 transition-all shadow-md">
+              <span id="pole-data-tekst" class="text-gray-500">Termin podstawienia</span>
+              <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <rect x="3.5" y="5" width="17" height="16" rx="2"/>
+                <path stroke-linecap="round" d="M3.5 9.5h17M8 3v4M16 3v4"/>
+              </svg>
+            </button>
+            <div id="kalendarz" class="hidden absolute z-30 left-0 right-0 top-full mt-2 bg-white border-2 border-gray-200 rounded-2xl shadow-xl p-4 w-full sm:w-80">
+              <div class="flex items-center justify-between mb-3">
+                <button type="button" id="kal-poprzedni" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-600">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <p id="kal-miesiac" class="font-bold text-gray-900 text-sm"></p>
+                <button type="button" id="kal-nastepny" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-600">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+              <div class="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-gray-400 mb-1">
+                <span>Pn</span><span>Wt</span><span>Śr</span><span>Cz</span><span>Pt</span><span>Sb</span><span>Nd</span>
+              </div>
+              <div id="kal-dni" class="grid grid-cols-7 gap-1 text-center text-sm"></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -571,11 +595,98 @@
       odswiez();
     });
 
-    // data podstawienia: najwcześniej jutro
+    // ===== Termin podstawienia: własny kalendarz (najwcześniej jutro) =====
     (function () {
-      const d = new Date();
-      d.setDate(d.getDate() + 1);
-      document.getElementById('pole-data').min = d.toISOString().slice(0, 10);
+      const MIESIACE = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
+      const pole = document.getElementById('pole-data');
+      const btn = document.getElementById('pole-data-btn');
+      const tekst = document.getElementById('pole-data-tekst');
+      const panel = document.getElementById('kalendarz');
+      const naglowek = document.getElementById('kal-miesiac');
+      const siatka = document.getElementById('kal-dni');
+
+      const dzisiaj = new Date();
+      dzisiaj.setHours(0, 0, 0, 0);
+      const najwczesniej = new Date(dzisiaj);
+      najwczesniej.setDate(najwczesniej.getDate() + 1);
+
+      let widokRok = najwczesniej.getFullYear();
+      let widokMiesiac = najwczesniej.getMonth();
+      let wybrana = null;
+
+      function formatujYMD(d) {
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      }
+
+      function formatujPL(d) {
+        return String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + d.getFullYear();
+      }
+
+      function rysuj() {
+        naglowek.textContent = MIESIACE[widokMiesiac] + ' ' + widokRok;
+        siatka.innerHTML = '';
+
+        const pierwszy = new Date(widokRok, widokMiesiac, 1);
+        let dzienTygodnia = pierwszy.getDay();
+        dzienTygodnia = dzienTygodnia === 0 ? 6 : dzienTygodnia - 1; // Pn=0 ... Nd=6
+        const dniWMiesiacu = new Date(widokRok, widokMiesiac + 1, 0).getDate();
+
+        for (let i = 0; i < dzienTygodnia; i++) {
+          siatka.appendChild(document.createElement('span'));
+        }
+
+        for (let dzien = 1; dzien <= dniWMiesiacu; dzien++) {
+          const data = new Date(widokRok, widokMiesiac, dzien);
+          const zaWczesnie = data < najwczesniej;
+          const jestWybrana = wybrana && formatujYMD(data) === formatujYMD(wybrana);
+
+          const el = document.createElement('button');
+          el.type = 'button';
+          el.textContent = String(dzien);
+          el.disabled = zaWczesnie;
+          el.className = 'h-8 w-8 mx-auto flex items-center justify-center rounded-full text-sm ' +
+            (zaWczesnie ? 'text-gray-300 cursor-not-allowed' :
+              jestWybrana ? 'bg-brand-700 text-white font-bold' :
+              'text-gray-700 hover:bg-brand-50 font-medium');
+
+          if (!zaWczesnie) {
+            el.addEventListener('click', () => {
+              wybrana = data;
+              pole.value = formatujYMD(data);
+              tekst.textContent = formatujPL(data);
+              tekst.classList.remove('text-gray-500');
+              tekst.classList.add('text-gray-900', 'font-semibold');
+              panel.classList.add('hidden');
+              rysuj();
+            });
+          }
+          siatka.appendChild(el);
+        }
+      }
+
+      btn.addEventListener('click', () => {
+        panel.classList.toggle('hidden');
+      });
+
+      document.getElementById('kal-poprzedni').addEventListener('click', () => {
+        widokMiesiac--;
+        if (widokMiesiac < 0) { widokMiesiac = 11; widokRok--; }
+        rysuj();
+      });
+
+      document.getElementById('kal-nastepny').addEventListener('click', () => {
+        widokMiesiac++;
+        if (widokMiesiac > 11) { widokMiesiac = 0; widokRok++; }
+        rysuj();
+      });
+
+      document.addEventListener('click', e => {
+        if (!panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+          panel.classList.add('hidden');
+        }
+      });
+
+      rysuj();
     })();
 
     document.getElementById('btn-mail').addEventListener('click', e => {
