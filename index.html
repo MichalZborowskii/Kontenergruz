@@ -27,13 +27,13 @@
   -->
 
   <title>Kontener na gruz - zamów online w całej Polsce | KontenerGruz</title>
-  <meta name="description" content="Kontener na gruz z podstawieniem nawet następnego dnia - cała Polska. Wybierz rozmiar (1–7 m³), cenę widzisz od razu. Zamów online lub telefonicznie.">
+  <meta name="description" content="Kontener na gruz z podstawieniem nawet następnego dnia - cała Polska. Wybierz rozmiar (BigBag, 3-12 m³), cenę widzisz od razu. Zamów online lub telefonicznie.">
   <link rel="canonical" href="https://kontenergruz.pl/">
   <meta property="og:title" content="Kontener na gruz - zamów online w całej Polsce">
-  <meta property="og:description" content="Kontenery na gruz i odpady 1–7 m³ z cenami od razu. Podstawienie nawet następnego dnia, w całej Polsce.">
+  <meta property="og:description" content="Kontenery na gruz i odpady - BigBag oraz kontenery 3-12 m³, ceny od razu. Podstawienie nawet następnego dnia, w całej Polsce.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kontenergruz.pl/">
-  <meta property="og:image" content="https://kontenergruz.pl/img/kontener-na-gruz.jpg">
+  <meta property="og:image" content="https://kontenergruz.pl/img/hero-pracownik.jpg">
   <meta property="og:locale" content="pl_PL">
   <script type="application/ld+json">
   {
@@ -44,7 +44,7 @@
     "telephone": "+48668364585",
     "email": "kontakt@kontenergruz.pl",
     "url": "https://kontenergruz.pl/",
-    "image": "https://kontenergruz.pl/img/kontener-na-gruz.jpg",
+    "image": "https://kontenergruz.pl/img/hero-pracownik.jpg",
     "areaServed": "Polska",
     "openingHours": ["Mo-Fr 06:00-17:00", "Sa 06:00-14:00"],
     "priceRange": "$$"
@@ -129,10 +129,12 @@
 
   <!-- ===== 1. Hero ===== -->
   <section class="relative min-h-screen flex items-center border-b border-gray-100 overflow-hidden">
-    <!-- TODO: podmienić na prawdziwe zdjęcie pracownika przy podstawianiu kontenera -->
-    <img src="img/kontener-na-gruz.jpg" width="1600" height="1068"
-      alt="Pracownik KontenerGruz podstawia kontener na gruz pod adresem klienta"
-      class="absolute inset-0 w-full h-full object-cover" loading="eager" fetchpriority="high">
+    <picture>
+      <source srcset="img/hero-pracownik.webp" type="image/webp">
+      <img src="img/hero-pracownik.jpg" width="1920" height="1122"
+        alt="Pracownik KontenerGruz podstawia kontener na gruz pod adresem klienta"
+        class="absolute inset-0 w-full h-full object-cover" loading="eager" fetchpriority="high">
+    </picture>
     <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
     <div class="relative max-w-5xl mx-auto px-4 py-32 w-full pt-40">
       <div class="max-w-2xl">
@@ -295,14 +297,18 @@
       <!-- Krok 3: adres podstawienia -->
       <div class="mt-12">
         <h3 class="text-xl font-bold text-gray-900 mb-4"><span class="text-brand-700">3.</span> Adres podstawienia</h3>
-        <div class="relative">
-          <input id="pole-adres" type="text" placeholder="Wpisz adres podstawienia (ulica, numer, miejscowość) *" autocomplete="off"
+        <div class="grid grid-cols-3 gap-4">
+          <div class="relative col-span-2">
+            <input id="pole-adres" type="text" placeholder="Wpisz adres podstawienia (ulica, miejscowość) *" autocomplete="off"
+              class="bg-white border-2 border-gray-300 rounded-2xl px-4 py-4 text-base w-full focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/20 transition-all shadow-md">
+            <div id="sug-adres" class="hidden absolute z-20 left-0 right-0 top-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden"></div>
+          </div>
+          <input id="pole-nr" name="numer_domu" type="text" placeholder="Nr domu" autocomplete="off"
             class="bg-white border-2 border-gray-300 rounded-2xl px-4 py-4 text-base w-full focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/20 transition-all shadow-md">
-          <div id="sug-adres" class="hidden absolute z-20 left-0 right-0 top-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden"></div>
         </div>
+        <p class="mt-2 text-xs text-gray-400">Jeśli numer domu nie uzupełni się automatycznie, wpisz go obok ręcznie.</p>
         <!-- Pola techniczne wypełniane automatycznie po wyborze adresu - wysyłane w formularzu, niewidoczne dla usera -->
         <input type="hidden" name="ulica" id="pole-ulica">
-        <input type="hidden" name="numer_domu" id="pole-nr">
         <input type="hidden" name="kod_pocztowy" id="pole-kod">
         <input type="hidden" name="miejscowosc" id="pole-miejscowosc">
         <div class="mt-4 relative">
@@ -428,10 +434,10 @@
         </div>
       </div>
       <div class="mt-14 grid sm:grid-cols-2 gap-4">
-        <img src="img/wywoz-gruzu-budowa.jpg" width="1400" height="933"
+        <img src="img/dol-strony-1.jpg" width="1400" height="732"
           alt="Wywóz gruzu z placu budowy - odpady budowlane i rozbiórkowe"
           class="rounded-lg w-full h-56 sm:h-64 object-cover" loading="lazy">
-        <img src="img/kontenery-odpady-segregacja.jpg" width="1400" height="932"
+        <img src="img/dol-strony-2.jpg" width="1400" height="817"
           alt="Kontenery na odpady - segregacja i legalna utylizacja zgodnie z BDO"
           class="rounded-lg w-full h-56 sm:h-64 object-cover" loading="lazy">
       </div>
